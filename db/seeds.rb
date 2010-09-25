@@ -1,7 +1,17 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
-#   Mayor.create(:name => 'Daley', :city => cities.first)
+dummy_salt = Array.new(32, '#').join ''
+dummy_hash = Array.new(32, '0').join ''
+
+unless User.all.size > 0
+  # Base user (username = admin, password = admin)
+  User.create(:login => 'admin', :priviledged => true) do |admin|
+    admin.password= 'admin'
+  end
+end
+
+unless User.find_by_login('anonymous')
+  # System account "Anonymous" needs to exist.
+  User.create(:login => 'anonymous', :priviledged => false) do |anonymous|
+    anonymous.id = -1
+    anonymous.password= 'Login is not Allowed for Anonymous anyway.'
+  end
+end
