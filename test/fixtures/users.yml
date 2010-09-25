@@ -1,0 +1,12 @@
+# Users to exist during testing
+---
+anonymous:
+    login: anonymous
+    password_salt: '00000000000000000000000000000000'
+    password_hash: '458d7136e0d034c8eaabdebc6c91f445310f8f73d47e8a48157901af17f207e5' # admin
+    
+admin:
+    login: admin
+    password_salt: '00000000000000000000000000000000'
+    password_hash: '458d7136e0d034c8eaabdebc6c91f445310f8f73d47e8a48157901af17f207e5' # admin
+    priviledged: true
