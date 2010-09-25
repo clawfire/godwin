@@ -8,8 +8,13 @@ class User < ActiveRecord::Base
   # Login needs to be there & unique
   validates_presence_of :login
   validates_uniqueness_of :login, :scope => :id, :case_sensitive => false
+  # The email has to be correct
+  validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+  # We need to have a profile instance
+  validates_presence_of :profile
+  validates_associated :profile
   # We need some basic information about authentication
-  validates_presence_of :password_salt, :password_hash
+  validates_presence_of :password_salt, :password_hash, :email
   validates_length_of :password_hash, :is => 64
   
   #--
@@ -41,10 +46,9 @@ class User < ActiveRecord::Base
   # Checks a login/password pair
   def self.authenticate(login, password)
     user = self.find_by_login(login)
-    return nil if user.nil?
+    return nil if user.nil? || login == 'anonymous'
     digested_password = User.digest(password, user.password_salt)
     return user if digested_password == user.password_hash
-    puts "#{digested_password} != #{user.password_hash}"
     return nil
   end
   
